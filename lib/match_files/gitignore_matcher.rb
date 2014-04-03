@@ -1,6 +1,5 @@
 # This is a free interpretation of Git dir.c module at https://github.com/git/git/blob/master/dir.c
-require('tempfile')
-class MatchFiles::GitignoreProcessor < MatchFiles::Processor
+class MatchFiles::GitignoreMatcher < MatchFiles::Matcher
 
   def initialize(root, patterns = [])
     super
@@ -15,13 +14,12 @@ class MatchFiles::GitignoreProcessor < MatchFiles::Processor
     match.nil? ? false : !match[:negative]
   end
 
-  # Determines if the given path matches the pattern
+  protected
+
   def match?(pattern, path)
     parsed_pattern = self.class.parse_pattern(pattern)
     match_parsed?(parsed_pattern, path)
   end
-
-  protected
 
   def self.parse_pattern(pattern)
     if pattern.nil? || pattern.empty? || pattern.start_with?('#')

@@ -1,7 +1,7 @@
 require('pathname')
 
 # This is a base class for all processors. It matches all files.
-class MatchFiles::Processor
+class MatchFiles::Matcher
   attr_reader :match_patterns
   attr_reader :root
 

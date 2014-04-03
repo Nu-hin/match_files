@@ -1,5 +1,6 @@
 # match_files
 
+[![Build Status](https://travis-ci.org/Nu-hin/match_files.svg?branch=master)](https://travis-ci.org/Nu-hin/match_files)
 [![Code Climate](https://codeclimate.com/github/Nu-hin/match_files.png)](https://codeclimate.com/github/Nu-hin/match_files)
 
 ## Description
@@ -45,7 +46,6 @@ files_to_process = matcher.unmatched_files # list only files that are NOT ignore
 files_to_process.each.do |file|
   # do some processing here
 end
-
 ```
 
 ### Using .gitignore file
@@ -62,33 +62,50 @@ files_to_process = matcher.unmatched_files # list only files that are NOT ignore
 files_to_process.each.do |file|
   # do some processing here
 end
-
 ```
 
 ### Using Git negative patterns
-```
+```ruby
 require 'match_files'
 
 # match all Ruby files, except those under /vendor directory
-matcher = MatchFiles.git('path/to/my/dir', ['*.rb', !/vendor])
+matcher = MatchFiles.git('path/to/my/dir', ['*.rb', '!/vendor]')
 
 ruby_files = matcher.matched_files
 
 ruby_files.each do |ruby_file|
   # do some code analysis
 end
-
 ```
 
 ### Testing specific files
 
-```
+```ruby
 require 'match_files'
 
 matcher = MatchFiles.git('path/to/my/dir', ['/spec/**/*_spec.rb'])
 
-# Check if our file is spec
+# check if our file is spec
+# use paths relative to the root directory without leading slash
 is_spec = matcher.matched?('spec/lib/match_files_spec.rb')
-
 ```
 
+### Extending
+
+If you wish to create your own matchers, simply inherit your class from `MatchFiles::Matcher` and override at least `#matched?` method. All patterns passed to the initializer are by default stored in `@match_patterns` instance variable.
+
+```ruby
+require 'match_files'
+
+class MyMatcher < MatchFiles::Matcher
+
+  # file is matched if it contains any of the patterns
+  def matched?(path)
+    @match_patterns.any? {|mp| path.include?(mp)}
+  end
+
+end
+
+matcher = MyMatcher.new('path/to/my/dir', ['foo', 'bar'])
+is_spec = matcher.matched?('/a/b/c/foo.md') # true
+```

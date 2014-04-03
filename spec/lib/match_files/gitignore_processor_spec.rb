@@ -20,7 +20,8 @@ describe 'MatchFiles::GitignoreProcessor' do
       'a/' => ['a', 'a/', 'a/readme.md', 'a/b/readme.md'],
       '*a/' => ['ba','a/ba', 'ba/a', 'a/ba/readme.md', 'ba/a/readme.md'],
       'readme.md' => ['readme.md', 'a/readme.md', 'a/b/readme.md'],
-      'b/*.md' => ['a/b/readme.md', 'b/readme.md']
+      'b/*.md' => ['a/b/readme.md', 'b/readme.md'],
+      'b/**/*.md' => ['b/readme.md', 'a/b/readme.md', 'a/b/c/readme.md']
     }.each do |p, paths|
       [p, "!#{p}"].each do |pattern|
         paths.map{|x| [x]}.flatten.each do |path|
@@ -41,7 +42,8 @@ describe 'MatchFiles::GitignoreProcessor' do
       '*a/' => ['b/1.ga', '1.ga'],
       'e/' => ['e', 'e'],
       '/readme.md' => ['a/readme.md', 'a/b/readme.md'],
-      '/b' => ['a/b/readme.md']
+      '/b' => ['a/b/readme.md'],
+      '/b/**/*.md' => ['a/b/readme.md', 'a/b/c/readme.md']
     }.each  do |p, paths|
       [p, "!#{p}"].each do |pattern|
         paths.map{|x| [x]}.flatten.each do |path|
@@ -97,5 +99,10 @@ describe 'MatchFiles::GitignoreProcessor' do
       expect do
         MatchFiles::GitignoreProcessor.new('some_not_existing_dir_that_is_sure_not_to_exist', ['*.md'])
       end.to raise_error ArgumentError
+    end
+
+    it 'should understand dotmatch recursion' do
+      processor = MatchFiles::GitignoreProcessor.new(@root, ['/a/**/*.md'])
+      expect(processor.matched_files).to have(6).items
     end
 end

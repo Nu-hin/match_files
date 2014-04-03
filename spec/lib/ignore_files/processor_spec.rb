@@ -21,14 +21,14 @@ describe 'MatchFiles::GitignoreProcessor' do
       expect(processor.all_files).to have(@files_count).items
     end
 
-    it 'should not ignore files' do
+    it 'should not have unmatched files' do
       processor = MatchFiles::Processor.new(@root)
-      expect(processor.not_ignored_files).to have(0).items
+      expect(processor.unmatched_files).to have(0).items
     end
 
-    it 'should ignore files' do
+    it 'should match all files' do
       processor = MatchFiles::Processor.new(@root)
-      expect(processor.ignored_files).to have(@files_count).items
+      expect(processor.matched_files).to have(@files_count).items
     end
 
     it 'should raise on non-existing dir' do

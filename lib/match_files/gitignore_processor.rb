@@ -7,9 +7,9 @@ class MatchFiles::GitignoreProcessor < MatchFiles::Processor
     parse_patterns
   end
 
-  def ignored?(path)
+  def matched?(path)
     match = @parsed_patterns.find do |parsed_pattern|
-      is_match_parsed?(parsed_pattern, path)
+      match_parsed?(parsed_pattern, path)
     end
 
     match.nil? ? false : !match[:negative]
@@ -18,7 +18,7 @@ class MatchFiles::GitignoreProcessor < MatchFiles::Processor
   # Determines if the given path matches the pattern
   def match?(pattern, path)
     parsed_pattern = self.class.parse_pattern(pattern)
-    is_match_parsed?(parsed_pattern, path)
+    match_parsed?(parsed_pattern, path)
   end
 
   protected
@@ -43,7 +43,7 @@ class MatchFiles::GitignoreProcessor < MatchFiles::Processor
     params
   end
 
-  def is_match_parsed?(parsed_pattern, path)
+  def match_parsed?(parsed_pattern, path)
     path = path.gsub(/^\/*/, '')
     path = path.gsub(/\/*$/, '')
     full_path = File.join(@root, path)
@@ -57,7 +57,7 @@ class MatchFiles::GitignoreProcessor < MatchFiles::Processor
 
     if !res && has_sep
       prefix = /(.*)\/[^\/]+$/.match(path)[1]
-      return is_match_parsed?(parsed_pattern, prefix)
+      return match_parsed?(parsed_pattern, prefix)
     else
       return res
     end

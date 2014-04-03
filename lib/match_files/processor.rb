@@ -1,6 +1,6 @@
 require('pathname')
 
-# This is a base class for all processors. It ignores all files.
+# This is a base class for all processors. It matches all files.
 class MatchFiles::Processor
   attr_reader :match_patterns
   attr_reader :root
@@ -15,8 +15,8 @@ class MatchFiles::Processor
     @match_patterns = patterns.map {|x| x.to_s}.select{|x| !x.empty?}
   end
 
-  # Returns true if the path given is ignored.
-  def ignored?(path)
+  # Returns true if the path given is matched.
+  def matched?(path)
     true
   end
 
@@ -27,14 +27,14 @@ class MatchFiles::Processor
     end
   end
 
-  # Returns list of ignored files in the root folder
-  def ignored_files
-    all_files.select {|x| ignored?(x)}
+  # Returns list of matched files in the root folder
+  def matched_files
+    all_files.select {|x| matched?(x)}
   end
 
-  # Returns list of files in the root folder which are not ignored.
-  def not_ignored_files
-    all_files.select {|x| !ignored?(x)}
+  # Returns list of files in the root folder which are not matched.
+  def unmatched_files
+    all_files.select {|x| !matched?(x)}
   end
 
   protected

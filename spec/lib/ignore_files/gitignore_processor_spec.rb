@@ -2,7 +2,7 @@ require_relative '../../spec_helper.rb'
 require 'tmpdir'
 require 'fileutils'
 
-describe 'IgnoreFiles::GitignoreProcessor' do
+describe 'MatchFiles::GitignoreProcessor' do
 
     before(:all) do
       prepare_test_dir
@@ -25,7 +25,7 @@ describe 'IgnoreFiles::GitignoreProcessor' do
       [p, "!#{p}"].each do |pattern|
         paths.map{|x| [x]}.flatten.each do |path|
           it "should match path '#{path}' to pattern '#{pattern}'" do
-            processor = IgnoreFiles::GitignoreProcessor.new(@root)
+            processor = MatchFiles::GitignoreProcessor.new(@root)
             expect(processor.match?(pattern, path)).to be_true
           end
         end
@@ -46,7 +46,7 @@ describe 'IgnoreFiles::GitignoreProcessor' do
       [p, "!#{p}"].each do |pattern|
         paths.map{|x| [x]}.flatten.each do |path|
           it "should not match path '#{path}' to pattern '#{pattern}'" do
-            processor = IgnoreFiles::GitignoreProcessor.new(@root)
+            processor = MatchFiles::GitignoreProcessor.new(@root)
             expect(processor.match?(pattern, path)).to be_false
           end
         end
@@ -54,48 +54,48 @@ describe 'IgnoreFiles::GitignoreProcessor' do
     end
 
     it 'should create instance' do
-      processor = IgnoreFiles::GitignoreProcessor.new(@root)
+      processor = MatchFiles::GitignoreProcessor.new(@root)
     end
 
     it 'should list all files' do
-      processor = IgnoreFiles::GitignoreProcessor.new(@root)
+      processor = MatchFiles::GitignoreProcessor.new(@root)
       expect(processor.all_files).to have(@files_count).items
     end
 
     it 'should ignore files' do
-      processor = IgnoreFiles::GitignoreProcessor.new(@root, ['*.md'])
+      processor = MatchFiles::GitignoreProcessor.new(@root, ['*.md'])
       expect(processor.ignored_files).to have(20).items
 
-      processor = IgnoreFiles::GitignoreProcessor.new(@root, ['*.txt'])
+      processor = MatchFiles::GitignoreProcessor.new(@root, ['*.txt'])
       expect(processor.ignored_files).to have(20).items
 
-      processor = IgnoreFiles::GitignoreProcessor.new(@root, ['*.ga'])
+      processor = MatchFiles::GitignoreProcessor.new(@root, ['*.ga'])
       expect(processor.ignored_files).to have(10).items
 
-      processor = IgnoreFiles::GitignoreProcessor.new(@root, ['*me.md'])
+      processor = MatchFiles::GitignoreProcessor.new(@root, ['*me.md'])
       expect(processor.ignored_files).to have(10).items
 
-      processor = IgnoreFiles::GitignoreProcessor.new(@root, ['*se.md'])
+      processor = MatchFiles::GitignoreProcessor.new(@root, ['*se.md'])
       expect(processor.ignored_files).to have(10).items
 
-      processor = IgnoreFiles::GitignoreProcessor.new(@root, ['/*.md'])
+      processor = MatchFiles::GitignoreProcessor.new(@root, ['/*.md'])
       expect(processor.ignored_files).to have(2).items
 
-      processor = IgnoreFiles::GitignoreProcessor.new(@root, ['ba/*.md'])
+      processor = MatchFiles::GitignoreProcessor.new(@root, ['ba/*.md'])
       expect(processor.ignored_files).to have(2).items
 
-      processor = IgnoreFiles::GitignoreProcessor.new(@root, ['b/*.md'])
+      processor = MatchFiles::GitignoreProcessor.new(@root, ['b/*.md'])
       expect(processor.ignored_files).to have(4).items
     end
 
     it 'should not ignore files' do
-      processor = IgnoreFiles::GitignoreProcessor.new(@root, ['*.md'])
+      processor = MatchFiles::GitignoreProcessor.new(@root, ['*.md'])
       expect(processor.not_ignored_files).to have(30).items
     end
 
     it 'should raise on non-existing dir' do
       expect do
-        IgnoreFiles::GitignoreProcessor.new('some_not_existing_dir_that_is_sure_not_to_exist', ['*.md'])
+        MatchFiles::GitignoreProcessor.new('some_not_existing_dir_that_is_sure_not_to_exist', ['*.md'])
       end.to raise_error ArgumentError
     end
 end

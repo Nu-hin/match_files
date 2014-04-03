@@ -1,11 +1,11 @@
-require File.expand_path("../lib/ignore_files/version", __FILE__)
+require File.expand_path("../lib/match_files/version", __FILE__)
 
 Gem::Specification.new do |s|
-  s.name = "ignore_files"
-  s.version = ::IgnoreFiles::VERSION
+  s.name = "match_files"
+  s.version = ::MatchFiles::VERSION
   s.authors = ["Nu-hin"]
   s.email = ["nuinuhin@gmail.com"]
-  s.homepage = "https://github.com/Nu-hin/ignore_files"
+  s.homepage = "https://github.com/Nu-hin/match_files"
 
   s.summary = %q{Lightweight gem that allows to ignore files according to the given patterns}
   s.description = %q{This gem provides a simplistic interface that allows to ignore files in the given directory according to given pattern.}

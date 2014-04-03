@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ignore_files (0.1)
+    match_files (0.1)
 
 GEM
   remote: https://rubygems.org/
@@ -41,5 +41,5 @@ PLATFORMS
 
 DEPENDENCIES
   coveralls
-  ignore_files!
+  match_files!
   rspec

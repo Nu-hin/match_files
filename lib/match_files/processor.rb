@@ -1,8 +1,8 @@
 require('pathname')
 
 # This is a base class for all processors. It ignores all files.
-class IgnoreFiles::Processor
-  attr_reader :ignore_patterns
+class MatchFiles::Processor
+  attr_reader :match_patterns
   attr_reader :root
 
   def initialize(root, patterns = [])
@@ -12,7 +12,7 @@ class IgnoreFiles::Processor
       raise ArgumentError
     end
 
-    @ignore_patterns = patterns.map {|x| x.to_s}.select{|x| !x.empty?}
+    @match_patterns = patterns.map {|x| x.to_s}.select{|x| !x.empty?}
   end
 
   # Returns true if the path given is ignored.

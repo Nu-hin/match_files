@@ -1,6 +1,6 @@
 # This is a free interpretation of Git dir.c module at https://github.com/git/git/blob/master/dir.c
 require('tempfile')
-class IgnoreFiles::GitignoreProcessor < IgnoreFiles::Processor
+class MatchFiles::GitignoreProcessor < MatchFiles::Processor
 
   def initialize(root, patterns = [])
     super
@@ -64,7 +64,7 @@ class IgnoreFiles::GitignoreProcessor < IgnoreFiles::Processor
   end
 
   def parse_patterns
-    @parsed_patterns = @ignore_patterns.reverse.map {|x| self.class.parse_pattern(x)}
+    @parsed_patterns = @match_patterns.reverse.map {|x| self.class.parse_pattern(x)}
   end
 
 end

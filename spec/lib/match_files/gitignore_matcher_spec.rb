@@ -105,4 +105,10 @@ describe 'MatchFiles::GitignoreMatcher' do
       processor = MatchFiles::GitignoreMatcher.new(@root, ['/a/**/*.md'])
       expect(processor.matched_files).to have(6).items
     end
+
+    it 'should ignore empty or commented patterns' do
+      expect(MatchFiles::GitignoreMatcher.send(:parse_pattern, '')).to be_nil
+      expect(MatchFiles::GitignoreMatcher.send(:parse_pattern, nil)).to be_nil
+      expect(MatchFiles::GitignoreMatcher.send(:parse_pattern, '# commented pattern')).to be_nil
+    end
 end

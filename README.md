@@ -1,6 +1,7 @@
 # match_files
 
 [![Build Status](https://travis-ci.org/Nu-hin/match_files.svg?branch=master)](https://travis-ci.org/Nu-hin/match_files)
+[![Gem Version](https://badge.fury.io/rb/match_files.svg)](http://badge.fury.io/rb/match_files)
 [![Coverage Status](https://coveralls.io/repos/Nu-hin/match_files/badge.png?branch=master)](https://coveralls.io/r/Nu-hin/match_files?branch=master)
 [![Code Climate](https://codeclimate.com/github/Nu-hin/match_files.png)](https://codeclimate.com/github/Nu-hin/match_files)
 

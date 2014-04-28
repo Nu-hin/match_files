@@ -42,8 +42,8 @@ require 'match_files'
 matcher = MatchFiles.git('path/to/my/dir', ['*.swp', '*.swx', '/vendor'])
 
 all_files = matcher.all_files # list all files ins the directory recursively
-ignored_files = matcher.matched_files # list only files ignored according to .gitignore
-files_to_process = matcher.unmatched_files # list only files that are NOT ignored
+ignored_files = matcher.matched_files # list only matched files
+files_to_process = matcher.unmatched_files # list only files that are NOT matched
 
 files_to_process.each.do |file|
   # do some processing here

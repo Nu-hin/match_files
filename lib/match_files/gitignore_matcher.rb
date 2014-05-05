@@ -1,3 +1,4 @@
+
 # This is a free interpretation of Git dir.c module at https://github.com/git/git/blob/master/dir.c
 class MatchFiles::GitignoreMatcher < MatchFiles::Matcher
 
@@ -8,7 +9,7 @@ class MatchFiles::GitignoreMatcher < MatchFiles::Matcher
 
   def matched?(path)
     match = @parsed_patterns.find do |parsed_pattern|
-      match_parsed?(parsed_pattern, path)
+      match_parsed?(parsed_pattern, relative_path(path))
     end
 
     match.nil? ? false : !match[:negative]
@@ -16,9 +17,9 @@ class MatchFiles::GitignoreMatcher < MatchFiles::Matcher
 
   protected
 
-  def match?(pattern, path)
+  def match?(pattern, relative_path)
     parsed_pattern = self.class.parse_pattern(pattern)
-    match_parsed?(parsed_pattern, path)
+    match_parsed?(parsed_pattern, relative_path)
   end
 
   def self.parse_pattern(pattern)
@@ -41,20 +42,20 @@ class MatchFiles::GitignoreMatcher < MatchFiles::Matcher
     params
   end
 
-  def match_parsed?(parsed_pattern, path)
-    path = path.gsub(/^\/*/, '')
-    path = path.gsub(/\/*$/, '')
-    full_path = File.join(@root, path)
-    res = !(parsed_pattern[:mustbedir] && !File.directory?(full_path))
+  def match_parsed?(parsed_pattern, relative_path)
+    relative_path = relative_path.gsub(/^\/*/, '')
+    relative_path = relative_path.gsub(/\/*$/, '')
+    full_relative_path = File.join(@root, relative_path)
+    res = !(parsed_pattern[:mustbedir] && !File.directory?(full_relative_path))
     f_pattern = File.join(@root, parsed_pattern[:pattern])
     flags = parsed_pattern[:nodir] ? 0 : File::FNM_PATHNAME
     f_free_pattern = File.join(@root, "*/#{parsed_pattern[:pattern]}")
-    res &&= File.fnmatch(f_pattern, full_path, flags) ||
-        (!parsed_pattern[:root] && File.fnmatch(f_free_pattern, full_path, flags))
-    has_sep = path.include?(File::SEPARATOR)
+    res &&= File.fnmatch(f_pattern, full_relative_path, flags) ||
+        (!parsed_pattern[:root] && File.fnmatch(f_free_pattern, full_relative_path, flags))
+    has_sep = relative_path.include?(File::SEPARATOR)
 
     if !res && has_sep
-      prefix = /(.*)\/[^\/]+$/.match(path)[1]
+      prefix = /(.*)\/[^\/]+$/.match(relative_path)[1]
       return match_parsed?(parsed_pattern, prefix)
     else
       return res

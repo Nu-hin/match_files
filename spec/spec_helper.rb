@@ -1,8 +1,7 @@
 require 'coveralls'
 Coveralls.wear!
 
-
-require_relative('../lib/match_files.rb')
+require_relative '../lib/match_files.rb'
 
 def prepare_test_dir(dirs = nil, files = nil, silence = true)
   @silence = silence

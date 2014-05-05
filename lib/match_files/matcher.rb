@@ -1,4 +1,4 @@
-require('pathname')
+require 'pathname'
 
 # This is a base class for all processors. It matches all files.
 class MatchFiles::Matcher
@@ -6,7 +6,7 @@ class MatchFiles::Matcher
   attr_reader :root
 
   def initialize(root, patterns = [])
-    @root = absolute_path(root.to_s)
+    @root = File.expand_path(root.to_s)
 
     if !Dir.exist?(@root)
       raise ArgumentError
@@ -39,7 +39,12 @@ class MatchFiles::Matcher
 
   protected
 
-  def absolute_path(path)
-    File.expand_path(path)
+  def relative_path(path)
+    pn = Pathname.new(path)
+    pn.relative? ? path : pn.relative_path_from(root_pathname)
+  end
+
+  def root_pathname
+    @root_pathname ||= Pathname.new(@root)
   end
 end

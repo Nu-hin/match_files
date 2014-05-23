@@ -12,6 +12,7 @@ class MatchFiles::Matcher
       raise ArgumentError
     end
 
+    @root_pathname = Pathname.new(@root)
     @match_patterns = patterns.map {|x| x.to_s}.select{|x| !x.empty?}
   end
 
@@ -39,12 +40,9 @@ class MatchFiles::Matcher
 
   protected
 
-  def relative_path(path)
+  def make_relative_path(path)
     pn = Pathname.new(path)
-    pn.relative? ? path : pn.relative_path_from(root_pathname)
+    pn.relative? ? path : pn.relative_path_from(@root_pathname).to_s
   end
 
-  def root_pathname
-    @root_pathname ||= Pathname.new(@root)
-  end
 end

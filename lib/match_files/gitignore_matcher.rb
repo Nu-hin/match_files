@@ -8,8 +8,9 @@ class MatchFiles::GitignoreMatcher < MatchFiles::Matcher
   end
 
   def matched?(path)
+    relative_path = make_relative_path(path)
     match = @parsed_patterns.find do |parsed_pattern|
-      match_parsed?(parsed_pattern, relative_path(path))
+      match_parsed?(parsed_pattern, relative_path)
     end
 
     match.nil? ? false : !match[:negative]

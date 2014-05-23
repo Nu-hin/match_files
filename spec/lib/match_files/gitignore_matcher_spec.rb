@@ -90,6 +90,12 @@ describe 'MatchFiles::GitignoreMatcher' do
       expect(processor.matched_files).to have(4).items
     end
 
+    it 'should handle absolute paths' do
+      processor = MatchFiles::GitignoreMatcher.new(@root, ['*.md'])
+      files = processor.all_files.map{|f| File.join(@root, f)}
+      expect(files.select{|f| processor.matched?(f)}).to have(20).items
+    end
+
     it 'should not match some files' do
       processor = MatchFiles::GitignoreMatcher.new(@root, ['*.md'])
       expect(processor.unmatched_files).to have(30).items

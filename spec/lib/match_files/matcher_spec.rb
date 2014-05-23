@@ -36,4 +36,14 @@ describe 'MatchFiles::Matcher' do
         MatchFiles::Matcher.new('some_not_existing_dir_that_is_sure_not_to_exist')
       end.to raise_error ArgumentError
     end
+
+  it 'should have correct root pathname' do
+    matcher = MatchFiles::Matcher.new(@root)
+  end
+
+  it 'should have calculate relative paths' do
+    matcher = MatchFiles::Matcher.new(@root)
+    path = File.join(@root, '1.txt')
+    expect(matcher.send(:make_relative_path, path)).to eq('1.txt')
+  end
 end
